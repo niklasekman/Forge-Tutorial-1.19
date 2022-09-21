@@ -18,6 +18,8 @@ public class TutorialMod
     public static final String MOD_ID = "tutorialmod";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
+
+    // 'Ery noice
     public TutorialMod()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
