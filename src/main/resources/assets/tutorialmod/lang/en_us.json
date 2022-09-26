@@ -8,5 +8,12 @@
   "block.tutorialmod.zircon_ore": "Zircon Ore",
   "block.tutorialmod.deepslate_zircon_ore": "Deepslate Zircon Ore",
 
-  "itemGroup.tutorialtab": "Zircon"
+  "itemGroup.tutorialtab": "Zircon",
+
+  "key.category.tutorialmod.tutorial": "Tutorial mod",
+  "key.tutorialmod.drink_water": "Drink Water",
+  "message.tutorialmod.thirst_level": "Current thirst",
+
+  "message.tutorialmod.drink_water": "GLug!",
+  "message.tutorialmod.no_water": "Bleh"
 }

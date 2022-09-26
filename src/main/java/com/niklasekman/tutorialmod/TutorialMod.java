@@ -3,6 +3,7 @@ package com.niklasekman.tutorialmod;
 import com.mojang.logging.LogUtils;
 import com.niklasekman.tutorialmod.Block.ModBlocks;
 import com.niklasekman.tutorialmod.item.ModItems;
+import com.niklasekman.tutorialmod.networking.ModMessages;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,7 +41,7 @@ public class TutorialMod
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         // Some common setup code
-
+        ModMessages.register();
     }
 
 
