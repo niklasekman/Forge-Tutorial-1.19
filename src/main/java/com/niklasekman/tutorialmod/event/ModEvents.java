@@ -1,16 +1,20 @@
 package com.niklasekman.tutorialmod.event;
 
 import com.niklasekman.tutorialmod.TutorialMod;
+import com.niklasekman.tutorialmod.networking.ModMessages;
+import com.niklasekman.tutorialmod.networking.packet.ThirstDataSyncS2CPacket;
 import com.niklasekman.tutorialmod.thirst.PlayerThirst;
 import com.niklasekman.tutorialmod.thirst.PlayerThirstProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,12 +61,23 @@ public class ModEvents {
         @SubscribeEvent
         public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
             if(event.side == LogicalSide.SERVER) {
-                event.player.getCapability(PlayerThirstProvider.PLAYER_THIRST).ifPresent(thirst -> {
-                    if(thirst.getThirst() > 0 && event.player.getRandom().nextFloat() < 0.005f) {
-                        thirst.removeThirst(1);
-                        event.player.sendSystemMessage(Component.literal("Removed thirst"));
+                event.player.getCapability(PlayerThirstProvider.PLAYER_THIRST).ifPresent(playerThirst -> {
+                    if(playerThirst.getThirst() > 0 && event.player.getRandom().nextFloat() < 0.005f) {
+                        playerThirst.removeThirst(1);
+                        ModMessages.sendToPlayer(new ThirstDataSyncS2CPacket(playerThirst.getThirst()), ((ServerPlayer) event.player));
                     }
                 });
+            }
+        }
+
+        @SubscribeEvent
+        public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
+            if(!event.getLevel().isClientSide()) {
+                if(event.getEntity() instanceof ServerPlayer player) {
+                    player.getCapability(PlayerThirstProvider.PLAYER_THIRST).ifPresent(playerThirst -> {
+                        ModMessages.sendToPlayer(new ThirstDataSyncS2CPacket(playerThirst.getThirst()), player);
+                    });
+                }
             }
         }
     }

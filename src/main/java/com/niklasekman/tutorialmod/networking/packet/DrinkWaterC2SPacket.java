@@ -1,5 +1,6 @@
 package com.niklasekman.tutorialmod.networking.packet;
 
+import com.niklasekman.tutorialmod.networking.ModMessages;
 import com.niklasekman.tutorialmod.thirst.PlayerThirstProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
@@ -45,6 +46,7 @@ public class DrinkWaterC2SPacket {
                     playerThirst.addThirst(1);
                     // output thirst level
                     player.sendSystemMessage(Component.literal("Thirst " + playerThirst.getThirst()));
+                    ModMessages.sendToPlayer(new ThirstDataSyncS2CPacket(playerThirst.getThirst()), player);
                 });
                 // play drinking sound
                 level.playSound(null, player.getOnPos(), SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 0.5f, level.random.nextFloat() * 0.1F + 0.9F);
@@ -56,6 +58,7 @@ public class DrinkWaterC2SPacket {
                 player.getCapability(PlayerThirstProvider.PLAYER_THIRST).ifPresent(playerThirst -> {
                     // output thirst level
                     player.sendSystemMessage(Component.literal("Thirst " + playerThirst.getThirst()));
+                    ModMessages.sendToPlayer(new ThirstDataSyncS2CPacket(playerThirst.getThirst()), player);
                 });
             }
         });
